@@ -1,65 +1,50 @@
-#O(n^2) quadratic time
-#O(n^2) quadratic space
-def my_min_1a(list)
-  min_num = nil
+#Phase I-O(n^2) quadratic time
+def my_min_1a(arr)
 
-  list.each do |num1|
-    dup_list = list.dup
-    dup_list.delete(num1)
-    min_num = num1 if dup_list.all? { |num2| num2 > num1 }
-  end
-
-  min_num
-end
-
-#O(n^2) quadratic time
-#O(1) constant space
-def my_min_1b(list)
-  list.each_with_index do |num1, i1|
+  arr.each do |ele1|
     min = true
-    list.each_with_index do |num2, i2|
-      next if i1 == i2
-      min = false if num2 < num1
-   end
-   return num1 if min
+    arr.each do |ele2|
+      min = false if ele2 < ele1
+    end
+    return true if min
   end
+  false
+
 end
 
-#O(n) linear time
-#O(1) constant space
-def my_min_2(list)
-  min_num = list.first
+#-Phase II-O(n)
+def my_min_2(arr)
 
-  list.each { |num| min_num = num if num < min_num }
+arr.inject {|acc, el| acc if acc.sum < el.sum}.sum
 
-  min_num
 end
 
-#O(n^3) cubic time
-#O(n^3) cubic space
-def largest_contiguous_subsum1(array)
-  subs = []
 
-  array.each_index do |idx1|
-    (idx1..array.length - 1).each do |idx2|
-      subs << array[idx1..idx2]
+
+
+def largest_contiguous_subsum1(arr)
+  subarrays = []
+
+  (0...arr.length).each do |idx1|
+    (idx1..arr.length).each do |idx2|
+      subarrays << array[idx1..idx2]
     end
   end
 
-  subs.map { |sub| sub.inject(:+) }.max
+  subarrays.inject {|acc, el| acc if acc.sum < el.sum}.sum
 end
 
 #O(n) linear time
 #O(1) constant space
 def largest_contiguous_subsum2(arr)
-  largest = arr.first
-  current = arr.first
+  largest_sum = arr.first
+  current_sum= arr.first
 
-  (1...arr.length).each do |i|
-    current = 0 if current < 0
-    current += arr[i]
-    largest = current if current > largest
+  arr.drop(1).each do |ele|
+    current = 0 if current_sum < 0
+    current_sum += ele
+    largest_sum = current_sum if current_sum > largest_sum
   end
 
-  largest
+  largest_sum
 end
